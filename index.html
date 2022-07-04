@@ -90,7 +90,7 @@
   <script>
     try {
       var typed = new Typed("#subtitle", {
-        strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
+        strings: ['路漫漫其修远兮', '这是一个认真的博客', '这里有十三个字，不信你数一数'],
         startDelay: 0,
         typeSpeed: 200,
         loop: true,
@@ -220,6 +220,83 @@
     
     <footer class="article-footer">
        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/start/" rel="tag">start</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
+    
+    <article
+  id="post-hexo-start"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/04/hexo-start/"
+    >用Hexo + GitHub 快速搭建自己的博客网站</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/04/hexo-start/" class="article-date">
+  <time datetime="2022-07-04T14:17:42.000Z" itemprop="datePublished">2022-07-04</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%B7%A5%E4%BD%9C/">工作</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="用Hexo-GitHub-搭建自己的博客网站"><a href="#用Hexo-GitHub-搭建自己的博客网站" class="headerlink" title="用Hexo + GitHub 搭建自己的博客网站"></a>用Hexo + GitHub 搭建自己的博客网站</h2><h3 id="什么是hexo"><a href="#什么是hexo" class="headerlink" title="什么是hexo"></a>什么是hexo</h3><p>官方给我们的描述是快速、简洁且高效的博客框架。Hexo是一款基于Node.js的静态博客框架，依赖少易于安装使用，支持 <code>Markdown</code> 的所有功能，一键部署，只需要一个指令就可以部署到<code>github pages</code>或者其他平台，支持多种模板引擎和工具。</p>
+<h3 id="安装搭建hexo"><a href="#安装搭建hexo" class="headerlink" title="安装搭建hexo"></a>安装搭建hexo</h3><p>要用GitHub 和 hexo 搭建个人的博客网站，首先必须有自己的github账号没什么问题吧，其次需要提前准备的环境：下载安装git, nodeJs，这个怎么去安装我想应该不用说了吧。准备好环境后我们还要安装 hexo:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+
+<p>安装完成，完成以后可用<br><code>hexo -v</code> 查看版本，同时也是验证是否安装完成。</p>
+<p>如上图说明我们已经安装完成了，然后我们来初始化我们的hexo项目:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// blog 是你的项目名字，取什么名字都行您随意</span><br><span class="line">hexo init blog</span><br></pre></td></tr></table></figure>
+
+<p>然后进入你的项目中，安装依赖：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd blog // 进入项目中</span><br><span class="line">npm install // 安装依赖包</span><br></pre></td></tr></table></figure>
+
+<p>完成后你的项目目录应该包含：</p>
+<ul>
+<li>node_modules：依赖包</li>
+<li>scaffolds：生成文章的模板</li>
+<li>source：存放你写的文章</li>
+<li>themes：主题</li>
+<li>_config.yml：博客的配置文件</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+
+<p>打开hexo的服务，在浏览器输入<code>http://localhost:4000/</code> 就可以打开你的博客了。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li></ul>
+
     </footer>
   </div>
 
@@ -323,11 +400,11 @@
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/friends">友链</a>
+      <a class="nav-item-link" href="/about">关于我</a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/2019/about">关于我</a>
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://www.baidu.com">友链</a>
     </li>
     
   </ul>
