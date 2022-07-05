@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>hexo 原理 |  希才的博客</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-hexo-3"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  hexo 原理
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/05/hexo-3/" class="article-date">
+  <time datetime="2022-07-05T02:19:11.000Z" itemprop="datePublished">2022-07-05</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">3.4k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">14 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <style>.markdown-body{word-break:break-word;line-height:1.75;font-weight:400;font-size:16px;overflow-x:hidden;color:#333}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{line-height:1.5;margin-top:35px;margin-bottom:10px;padding-bottom:5px}.markdown-body h1{font-size:24px;margin-bottom:5px}.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{font-size:20px}.markdown-body h2{padding-bottom:12px;border-bottom:1px solid #ececec}.markdown-body h3{font-size:18px;padding-bottom:0}.markdown-body h6{margin-top:5px}.markdown-body p{line-height:inherit;margin-top:22px;margin-bottom:22px}.markdown-body img{max-width:100%}.markdown-body hr{border:none;border-top:1px solid #ddd;margin-top:32px;margin-bottom:32px}.markdown-body code{word-break:break-word;border-radius:2px;overflow-x:auto;background-color:#fff5f5;color:#ff502c;font-size:.87em;padding:.065em .4em}.markdown-body code,.markdown-body pre{font-family:Menlo,Monaco,Consolas,Courier New,monospace}.markdown-body pre{overflow:auto;position:relative;line-height:1.75}.markdown-body pre>code{font-size:12px;padding:15px 12px;margin:0;word-break:normal;display:block;overflow-x:auto;color:#333;background:#f8f8f8}.markdown-body a{text-decoration:none;color:#0269c8;border-bottom:1px solid #d1e9ff}.markdown-body a:active,.markdown-body a:hover{color:#275b8c}.markdown-body table{display:inline-block!important;font-size:12px;width:auto;max-width:100%;overflow:auto;border:1px solid #f6f6f6}.markdown-body thead{background:#f6f6f6;color:#000;text-align:left}.markdown-body tr:nth-child(2n){background-color:#fcfcfc}.markdown-body td,.markdown-body th{padding:12px 7px;line-height:24px}.markdown-body td{min-width:120px}.markdown-body blockquote{color:#666;padding:1px 23px;margin:22px 0;border-left:4px solid #cbcbcb;background-color:#f8f8f8}.markdown-body blockquote:after{display:block;content:""}.markdown-body blockquote>p{margin:10px 0}.markdown-body ol,.markdown-body ul{padding-left:28px}.markdown-body ol li,.markdown-body ul li{margin-bottom:0;list-style:inherit}.markdown-body ol li .task-list-item,.markdown-body ul li .task-list-item{list-style:none}.markdown-body ol li .task-list-item ol,.markdown-body ol li .task-list-item ul,.markdown-body ul li .task-list-item ol,.markdown-body ul li .task-list-item ul{margin-top:0}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:3px}.markdown-body ol li{padding-left:6px}.markdown-body .contains-task-list{padding-left:0}.markdown-body .task-list-item{list-style:none}@media (max-width:720px){.markdown-body h1{font-size:24px}.markdown-body h2{font-size:20px}.markdown-body h3{font-size:18px}}</style>
+
+<p>一直在用 Hexo 写博客，但是对其原理并不是很清晰，在网上找了一些资料，对 Hexo 有了新的认识，现在就来记录一下</p>
+<h1 id="使用-Hexo-github-pages-搭建博客"><a href="#使用-Hexo-github-pages-搭建博客" class="headerlink" title="使用 Hexo + github pages 搭建博客"></a>使用 Hexo + github pages 搭建博客</h1><p>记得刚开始知道 Hexo + github pages 搭建博客是在 2016 年，那时候，闺蜜非常激动的给我说自己建了一个博客，然后给我发过来了一个地址，我打开之后感觉她技术好牛逼啊，这都可以做到（因为潜意识中，创建一个网址是需要很复杂的过程的，并且要让别人通过地址访问也是一个很麻烦甚至觉得很花钱的一件事情）。</p>
+<p>然后她给我说很简单，是用 Hexo + github pages 搭建的，当时是一脸懵逼啊，然后百度了一下，发现很多人都在使用 Hexo + github pages 搭建博客。</p>
+<p>拖延症的我又过了几个月才开始按照网上的教程一步一步的创建自己的博客。</p>
+<h2 id="github-的-pages-服务"><a href="#github-的-pages-服务" class="headerlink" title="github 的 pages 服务"></a>github 的 pages 服务</h2><p>开始只是按照网上的教程一步一步跟着做，将项目源码托管在 github 上，使用 github 的 pages 服务。其实 github 的 pages 服务不只是可以展示博客，你的每一个 github 仓库都有 pages 服务，可以通过简单的设置通过项目的 index.html 为入口展示你的项目，这一点也很实用啊有木有！但是大部分的 pages 服务都是用来搭建个人博客的。</p>
+<p>例如，我之前的 canvasStar 的项目，我将源码上传到了 github 上，然后如下设置：  </p>
+<p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/8/12/2beb6270f8ec6ea7bed855e6d817d0d6~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" alt="pages服务第一步"></p>
+<p>pages服务第一步</p>
+<p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/8/12/d0193e3ce30c8e067614bb643e1b79ce~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" alt="pages服务第二步"></p>
+<p>pages服务第二步</p>
+<blockquote>
+<p>github pages支持静态页面的解析</p>
+</blockquote>
+<p>然后你就可以通过图中红色框框圈出的地址来访问。</p>
+<h2 id="coding-的-pages-服务"><a href="#coding-的-pages-服务" class="headerlink" title="coding 的 pages 服务"></a>coding 的 pages 服务</h2><p>在初创博客的时候，是将代码放在 github 上，然后通过 pages 访问，然后了解到国内访问 github 速度还是慢一些，并且 github 不会被百度收录，不利于 SEO，所以又将代码托管到了 coding 上，coding 也有类似的 pages 服务。也用了一段时间，但是 coding 现在不升级为会员打开有广告。于是就自己买了个虚拟主机，将代码直接放在了虚拟主机上。</p>
+<h2 id="为什么使用-Hexo-github-pages-搭建博客"><a href="#为什么使用-Hexo-github-pages-搭建博客" class="headerlink" title="为什么使用 Hexo + github pages 搭建博客"></a>为什么使用 Hexo + github pages 搭建博客</h2><p>Hexo 是用来生成 HTML 的，github pages 用来展示 HTML（根据上面的介绍，我们可以理解我们还可以使用 coding 的 pages 服务，如果自己有服务器的话，可以上传到自己的服务器）。</p>
+<h1 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h1><p>使用 Hexo + github pages 搭建博客，刚刚我们简单介绍了 github pages，那么现在我们就该介绍一下 Hexo，我们了解到 Hexo 是用来生成 HTML 的，那么这篇文章我们就主要来讲一下 Hexo 是怎样生成 HTML 的。</p>
+<h2 id="什么是-Hexo"><a href="#什么是-Hexo" class="headerlink" title="什么是 Hexo"></a>什么是 Hexo</h2><p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/8/12/1a5437eb122fc14fc88b1920aed5dcca~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp" alt="hexo官网"></p>
+<p>hexo官网</p>
+<p>在 Hexo 的官网，我们可以直观的看到对 Hexo 的介绍：<strong>快速、简洁且高效的博客框架</strong></p>
+<p>在 Hexo 的文档中，我们可以找到官方对 Hexo 的定义：</p>
+<blockquote>
+<p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
+</blockquote>
+<p>在官方文档中安装了 Hexo 中我们就安装了 Hexo，然后我们就可以看到文档结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml      // 站点配置文件</span><br><span class="line">├── db.json          // 缓存文件</span><br><span class="line">├── node_modules     // 安装的插件以及hexo所需的一些nodejs模块</span><br><span class="line">├── package.json     // 项目的依赖文件</span><br><span class="line">├── scaffolds        // 模版文件</span><br><span class="line">├── source           // 源文件，用来存放你的文章 md 文件</span><br><span class="line">└── themes           // 主题文件</span><br></pre></td></tr></table></figure>
+
+<p>然后我们可以安装主题，比我我安装的 NexT 主题，安装完之后会在 <code>themes</code> 下面产生一个 next 文件存放主题中的内容，文档结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── LICENSE</span><br><span class="line">├── README.en.md       // READEME 英文版</span><br><span class="line">├── README.md          // READEME 中文文件</span><br><span class="line">├── _config.yml        // 主题配置文件</span><br><span class="line">├── bower.json</span><br><span class="line">├── gulpfile.coffee</span><br><span class="line">├── languages         // 多语言配置文件</span><br><span class="line">├── layout            // 模板文件</span><br><span class="line">├── package.json      // 项目的依赖文件</span><br><span class="line">├── scripts           // 主题的脚本文件</span><br><span class="line">├── source            // 主题的资源文件 CSS IMG</span><br><span class="line">└── test</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo-的工作原理"><a href="#Hexo-的工作原理" class="headerlink" title="Hexo 的工作原理"></a>Hexo 的工作原理</h2><p>这里我们来分析一下 Hexo 每次部署的流程</p>
+<ol>
+<li>hexo g：生成静态文件。将我们的数据和界面相结合生成静态文件的过程。会遍历主题文件中的 <code>source</code> 文件夹（js、css、img 等静态资源），然后建立索引，然后根据索引生成 <code>pubild</code> 文件夹中，此时的 <code>publid</code> 文件是由 html、 js、css、img 建立的纯静态文件可以通过 <code>index.html</code> 作为入口访问你的博客。</li>
+<li>hexo d：部署文件。部署主要是根据在 <code>_config.yml</code> 中配置的 <code>git</code> 仓库或者 <code>coding</code> 的地址，将 <code>public</code> 文件上传至 github 或者 coding 中。然后再根据上面的 github 提供的 pages 服务呈现出页面。当然你也可以直接将你生成的 <code>public</code> 文件上传至你自己的服务器上。</li>
+</ol>
+<h1 id="Hexo-的模板引擎"><a href="#Hexo-的模板引擎" class="headerlink" title="Hexo 的模板引擎"></a>Hexo 的模板引擎</h1><blockquote>
+<p>模板引擎的作用，就是将界面与数据分离。最简单的原理是将模板内容中指定的地方替换成数据，实现业务代码与逻辑代码分离。</p>
+</blockquote>
+<p>我们可以注意到，在 Hexo 中，<code>source</code> 文件夹和 <code>themes</code> 文件夹是在同级的，我们就可以将 <code>source</code> 文件夹理解为数据库，而主题文件夹相当于 界面。然后我们 <code>hexo g</code> 就将我们的数据和界面相结合生成静态文件 <code>public</code>。</p>
+<p>Hexo 的模板引擎是默认使用 ejs 编写的。hexo首先会解析 md 文件，然后根据 layout 判断布局类型，再调用其他的文件，这样每一块的内容都是独立的，提高代码的复用性。最终会生成一个 html 页面。</p>
+<p>模板文件在 <code>layout</code> 文件夹下，<code>layout</code> 文件文档结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _custom                           // 通用布局</span><br><span class="line">├── _layout.swig                      // 默认布局布局</span><br><span class="line">├── _macro                            // 插件模板</span><br><span class="line">├── _partials                         // 局部布局</span><br><span class="line">├── _scripts                          // script模板</span><br><span class="line">├── _third-party                      // 第三方插件模板</span><br><span class="line">├── archive.swig                      // 归档模板</span><br><span class="line">├── category.swig                     // 分类模板</span><br><span class="line">├── index.swig                        // 首页模板</span><br><span class="line">├── page.swig                         // 其他模板</span><br><span class="line">├── photo.swig                        // 照片模板（自定义）</span><br><span class="line">├── post.swig                         // 文章模板</span><br><span class="line">├── schedule.swig                     // 归档模板</span><br><span class="line">└── tag.swig                          // 标签模板</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>每个模板都默认使用layout布局，您可在文章的前置申明中指定其他布局，比如“post”或者“page”或是设为false来关闭布局功能（如果不填默认是post，这个在_config.yml中可以设置默认值），您甚至可在布局中再使用其他布局来建立嵌套布局。</p>
+</blockquote>
+<p>在我们新建页面或者新建文章的使用可以选定我们使用的模板。<code>hexo new [layout] &lt;title&gt;</code>就会使用对应的模板。</p>
+<p>其中 <code>_layout.swig</code> 是通用模板，里面引入了 <code>head</code>、<code>footer</code> 等公共组件，然后在其他的模板中会引入这个 <code>_layout.swig</code> 通用模板，比如 <code>post.swig</code> 模板</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &#x27;_layout.swig&#x27; %&#125;</span><br><span class="line">&#123;% import &#x27;_macro/post.swig&#x27; as post_template %&#125;</span><br><span class="line">&#123;% import &#x27;_macro/sidebar.swig&#x27; as sidebar_template %&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;% block title %&#125; &#123;&#123; page.title &#125;&#125; | &#123;&#123; config.title &#125;&#125; &#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block page_class %&#125;page-post-detail&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;% block content %&#125;</span><br><span class="line"></span><br><span class="line">  &lt;div id=&quot;posts&quot; class=&quot;posts-expand&quot;&gt;</span><br><span class="line">    &#123;&#123; post_template.render(page) &#125;&#125;</span><br><span class="line"></span><br><span class="line">    &lt;div class=&quot;post-spread&quot;&gt;</span><br><span class="line">      &#123;% if theme.jiathis %&#125;</span><br><span class="line">        &#123;% include &#x27;_partials/share/jiathis.swig&#x27; %&#125;</span><br><span class="line">      &#123;% elseif theme.baidushare %&#125;</span><br><span class="line">        &#123;% include &#x27;_partials/share/baidushare.swig&#x27; %&#125;</span><br><span class="line">      &#123;% elseif theme.add_this_id %&#125;</span><br><span class="line">        &#123;% include &#x27;_partials/share/add-this.swig&#x27; %&#125;</span><br><span class="line">      &#123;% elseif theme.duoshuo_shortname and theme.duoshuo_share %&#125;</span><br><span class="line">        &#123;% include &#x27;_partials/share/duoshuo_share.swig&#x27; %&#125;</span><br><span class="line">      &#123;% endif %&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block sidebar %&#125;</span><br><span class="line">  &#123;&#123; sidebar_template.render(true) &#125;&#125;</span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;% block script_extra %&#125;</span><br><span class="line">  &#123;% include &#x27;_scripts/pages/post-details.swig&#x27; %&#125;</span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中在第 11 行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% block content %&#125; </span><br><span class="line">    // 中间为该模板自定义内容</span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="数据的填充"><a href="#数据的填充" class="headerlink" title="数据的填充"></a>数据的填充</h1><p>数据的填充主要是 <code>hexo \-g</code> 的时候将数据传递给 swig 模板，然后再由 swig 模板填充到 HTML 中。</p>
+<h2 id="配置文件中的数据"><a href="#配置文件中的数据" class="headerlink" title="配置文件中的数据"></a>配置文件中的数据</h2><p>Hexo 的配置文件 <code>_config.yml</code> 使用 <a href="https://link.juejin.cn/?target=http://docs.ansible.com/ansible/latest/YAMLSyntax.html" title="http://docs.ansible.com/ansible/latest/YAMLSyntax.html">yml语法</a> 。例如博客的名字、副标题等等之类。这些数据项组织在 config 对象中。可以数字、字符串、对象、数组，</p>
+<h2 id="配置文件中数据的使用"><a href="#配置文件中数据的使用" class="headerlink" title="配置文件中数据的使用"></a>配置文件中数据的使用</h2><p>如果要在模板中使用某个具体的值，比如字符串、数字、逻辑变量或者对象的某个成员，可以在主题的模板文件 swig 中直接使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% block title %&#125; &#123;&#123; page.title &#125;&#125; | &#123;&#123; config.title &#125;&#125; &#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo-中的变量"><a href="#Hexo-中的变量" class="headerlink" title="Hexo 中的变量"></a>Hexo 中的变量</h2><p>Hexo 提供了很多的变量，比如我们上面使用的 <code>page</code> 变量，还有 <code>site</code> 变量等，这些都是 Hexo 提供的，我们可以拿来直接使用的，常用的变量有：</p>
+<ul>
+<li><code>site</code>：对应整个网站的变量，一般会用到 <code>site.posts.length</code> 制作分页器。<ul>
+<li><code>site.posts</code> 所有文章</li>
+<li><code>site.pages</code> 所有分页</li>
+<li><code>site.categories</code> 所有分类</li>
+<li><code>site.tags</code> 所有标签</li>
+</ul>
+</li>
+<li><code>page</code>：存放当前页面的信息，例如我在 <code>index.ejs</code> 中使用 <code>page.posts</code> 获取了当前页面的所有文章而不是使用 <code>site.posts</code>。</li>
+<li><code>config</code>：<code>config</code> 变量我们在主目录下配置文件 <code>_config.yml</code> 中保存的信息。</li>
+<li><code>theme</code>：<code>theme</code> 变量是我们在主题目录下配置文件 <code>_config.yml</code> 中保存的信息。</li>
+<li><code>path</code>：当前页面的路径（不含根路径）。</li>
+<li><code>url</code>：页面完整网址。</li>
+</ul>
+<h3 id="页面变量"><a href="#页面变量" class="headerlink" title="页面变量"></a>页面变量</h3><p>Page(page) 这里指的是 <code>hexo new page</code> 创建的那个页面</p>
+<ul>
+<li><code>page.title</code>：文章标题</li>
+<li><code>page.date</code>：文章建立日期</li>
+<li><code>page.updated</code>：文章更新日期</li>
+<li><code>page.comments</code>：留言是否开启</li>
+<li><code>page.layout</code>：布局名称</li>
+<li><code>page.content</code>：文章完整内容</li>
+<li><code>page.excerpt</code>：文章摘要</li>
+<li><code>page.more</code>：除了摘要的其他内容</li>
+<li><code>page.source</code>：文章原始路劲</li>
+<li><code>page.full_source</code>：文章完整原始路径</li>
+<li><code>page.path</code>：文章网址（不含根路径），通常在主题中使用url_for(page.path)</li>
+<li><code>page.permalink</code>：文章永久网址</li>
+<li><code>page.prev</code>：上一篇文章，如果此为第一篇文章则为null</li>
+<li><code>page.next</code>：下一篇文章，如果此为最后一篇文章则为null</li>
+<li><code>page.raw</code>：文章原始内容</li>
+<li><code>page.photos</code>：文章的照片（用于相册）</li>
+<li><code>page.link</code>：文章的外链（用于链接文章）</li>
+</ul>
+<h3 id="Post-post-变量"><a href="#Post-post-变量" class="headerlink" title="Post(post) 变量"></a>Post(post) 变量</h3><p>这里指的是文章页面，与page布局相同，添加如下变量：</p>
+<ul>
+<li><code>page.pulished</code>：文章非草稿为true</li>
+<li><code>page.categories</code>：文章分类</li>
+<li><code>page.tags</code>：文章标签</li>
+</ul>
+<h3 id="首页-index"><a href="#首页-index" class="headerlink" title="首页(index)"></a>首页(index)</h3><ul>
+<li><code>page.per_page</code>：每一页显示的文章数</li>
+<li><code>page.total</code>：文章数量</li>
+<li><code>page.current</code>：当前页码</li>
+<li><code>page.current_url</code>：当前页的URL</li>
+<li><code>page.posts</code>：当前页的文章</li>
+<li><code>page.prev</code>：前一页页码，如果为第一页，该值为0</li>
+<li><code>page.prev_link</code>：前一页URL，如果为第一页，则为’’</li>
+<li><code>page.next</code>：后一页页码，如果为最后一页，则为0</li>
+<li><code>page.next_link</code>：后一页URL，如果为最后一页，则为’’</li>
+<li><code>page.path</code>：当前页网址（不含根路径），通常在主题中使用url_for(page.path)</li>
+</ul>
+<h3 id="归档页-archive"><a href="#归档页-archive" class="headerlink" title="归档页(archive)"></a>归档页(archive)</h3><p>与index布局相同，但是新增如下变量：</p>
+<ul>
+<li><code>archive</code> 为true</li>
+<li><code>year</code> 归档年份（4位）</li>
+<li><code>month</code> 归档月份（不包含0）</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>非要说 Hexo 是什么的话，我觉得就是生成静态页面的工具，可以将我们使用 markdown 编写的内容与主题模板相结合，生成 HTML 静态文件。并且可以和 github 的 pages 或者其他可以将静态页面展现出来的服务（例如 coding 的 pages 服务）相结合，一键部署。</p>
+<p>再深入一点讲 Hexo 的原理的话，那就应该是使用 <a href="https://link.juejin.cn/?target=http://www.ruanyifeng.com/blog/2016/07/yaml.html?f=tt" title="http://www.ruanyifeng.com/blog/2016/07/yaml.html?f=tt">yaml 语言</a> 做配置文件，使用 <a href="https://link.juejin.cn/?target=http://www.360doc.com/content/16/0115/10/597197_528136785.shtml" title="http://www.360doc.com/content/16/0115/10/597197_528136785.shtml">ejs</a> 或者 <a href="https://link.juejin.cn/?target=https://www.ibm.com/developerworks/cn/aix/library/au-swig/" title="https://www.ibm.com/developerworks/cn/aix/library/au-swig/">swig</a> 作为主题模板，与使用 markdown 书写的内容结合，生成静态 HTML 文件。</p>
+<h1 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h1><ul>
+<li><a href="https://link.juejin.cn/?target=http://www.ituring.com.cn/article/199295" title="http://www.ituring.com.cn/article/199295">Hexo Docs</a></li>
+<li><a href="https://link.juejin.cn/?target=https://segmentfault.com/a/1190000006057336" title="https://segmentfault.com/a/1190000006057336">写一个自己的Hexo主题</a></li>
+<li><a href="https://link.juejin.cn/?target=http://www.360doc.com/content/16/0913/16/33651124_590545274.shtml%23/" title="http://www.360doc.com/content/16/0913/16/33651124_590545274.shtml#/">Hexo 主题制作指南</a></li>
+<li><a href="https://link.juejin.cn/?target=https://segmentfault.com/a/1190000008784436" title="https://segmentfault.com/a/1190000008784436">hexo原理浅析</a></li>
+</ul>
+ 
+      <!-- reward -->
+      
+      <div id="reword-out">
+        <div id="reward-btn">
+          Donate
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/07/05/hexo-3/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2022/07/05/hexo-theme-custom/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">hexo-theme-custom</div>
+      </a>
+    
+  </nav>
+
+  
+   
+    
+    <script src="https://cdn.staticfile.org/twikoo/1.4.18/twikoo.all.min.js"></script>
+    <div id="twikoo" class="twikoo"></div>
+    <script>
+        twikoo.init({
+            envId: ""
+        })
+    </script>
+ 
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2022
+        <i class="ri-heart-fill heart_icon"></i> xicai
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="希才的博客"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/%E6%97%85%E8%A1%8C/">旅行</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="http://shenyu-vip.lofter.com">摄影</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://www.baidu.com">友链</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
